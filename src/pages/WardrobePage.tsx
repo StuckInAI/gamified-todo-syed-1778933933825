@@ -1,13 +1,9 @@
 import { useState } from 'react';
-import clsx from 'clsx';
-import { Check, Lock } from 'lucide-react';
 import { useGame } from '@/hooks/useGame';
 import { SHOP_ITEMS } from '@/lib/shop';
-import type { ShopItem } from '@/types';
+import type { Slot } from '@/types';
 import Character from '@/components/character/Character';
-import styles from './WardrobePage.module.css';
-
-type Slot = ShopItem['slot'];
+import styles from '@/components/shop/ShopItemCard.module.css';
 
 const SLOTS: { id: Slot; label: string; emoji: string }[] = [
   { id: 'hat', label: 'Hats', emoji: '🎩' },
@@ -17,86 +13,96 @@ const SLOTS: { id: Slot; label: string; emoji: string }[] = [
 ];
 
 export default function WardrobePage() {
-  const { character, equipItem, unequipSlot } = useGame();
+  const { character, equipItem, unequipItem } = useGame();
   const [activeSlot, setActiveSlot] = useState<Slot>('hat');
 
-  const items = SHOP_ITEMS.filter(
-    (item) => character.ownedItems.includes(item.id) && item.slot === activeSlot,
+  const owned = SHOP_ITEMS.filter(
+    (item) => character.ownedItemIds.includes(item.id) && item.slot === activeSlot,
   );
 
   const equippedId = character.equipped[activeSlot];
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <h1 className={styles.title}>Wardrobe</h1>
-        <p className={styles.subtitle}>Dress up your cozy companion ✨</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-5)' }}>
+      <header style={{ textAlign: 'center' }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, marginBottom: 4 }}>Wardrobe 👗</h1>
+        <p style={{ color: 'var(--ink-soft)', fontStyle: 'italic', fontSize: 14 }}>
+          Dress up your cozy companion ✨
+        </p>
       </header>
 
-      <section className={styles.preview}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          padding: 'var(--sp-5)',
+          background: 'var(--bg-card)',
+          borderRadius: 'var(--r-lg)',
+          boxShadow: 'var(--shadow-sm)',
+        }}
+      >
         <Character equipped={character.equipped} size="lg" />
-      </section>
+      </div>
 
-      <nav className={styles.tabs}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
         {SLOTS.map((s) => (
           <button
             key={s.id}
-            className={clsx(styles.tab, activeSlot === s.id && styles.tabActive)}
             onClick={() => setActiveSlot(s.id)}
+            style={{
+              padding: '8px 14px',
+              borderRadius: 'var(--r-pill)',
+              background: activeSlot === s.id ? 'var(--peach)' : 'var(--bg-soft)',
+              fontWeight: 700,
+              fontSize: 13,
+              color: 'var(--ink)',
+              boxShadow: activeSlot === s.id ? 'var(--shadow-sm)' : 'none',
+            }}
           >
-            <span>{s.emoji}</span>
-            <span>{s.label}</span>
+            {s.emoji} {s.label}
           </button>
         ))}
-      </nav>
+      </div>
 
-      <section className={styles.grid}>
-        <button
-          className={clsx(styles.itemCard, !equippedId && styles.itemActive)}
-          onClick={() => unequipSlot(activeSlot)}
+      {owned.length === 0 ? (
+        <p style={{ textAlign: 'center', color: 'var(--ink-soft)', fontStyle: 'italic' }}>
+          No items in this category yet — visit the shop! 🛍️
+        </p>
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
+            gap: 'var(--sp-3)',
+          }}
         >
-          <div className={styles.itemSwatch} style={{ background: 'var(--bg-soft)' }}>
-            <span style={{ fontSize: 28 }}>🚫</span>
-          </div>
-          <span className={styles.itemName}>None</span>
-          {!equippedId && (
-            <span className={styles.equippedBadge}>
-              <Check size={12} /> Equipped
-            </span>
-          )}
-        </button>
-
-        {items.map((item) => {
-          const isEquipped = equippedId === item.id;
-          return (
-            <button
-              key={item.id}
-              className={clsx(styles.itemCard, isEquipped && styles.itemActive)}
-              onClick={() => equipItem(item.id)}
-            >
-              <div className={styles.itemSwatch} style={{ background: item.color }}>
-                <span style={{ fontSize: 28 }}>{item.emoji}</span>
+          {owned.map((item) => {
+            const isEquipped = equippedId === item.id;
+            return (
+              <div key={item.id} className={styles.card}>
+                <div className={styles.preview} style={{ background: item.color }}>
+                  <span className={styles.emoji}>{item.emoji}</span>
+                </div>
+                <div className={styles.info}>
+                  <p className={styles.name}>{item.name}</p>
+                  <button
+                    className={styles.buyBtn}
+                    onClick={() =>
+                      isEquipped ? unequipItem(item.slot) : equipItem(item.id)
+                    }
+                    style={{
+                      background: isEquipped ? 'var(--bg-soft)' : undefined,
+                      color: isEquipped ? 'var(--ink-soft)' : undefined,
+                    }}
+                  >
+                    {isEquipped ? 'Unequip' : 'Equip'}
+                  </button>
+                </div>
               </div>
-              <span className={styles.itemName}>{item.name}</span>
-              {isEquipped && (
-                <span className={styles.equippedBadge}>
-                  <Check size={12} /> Equipped
-                </span>
-              )}
-            </button>
-          );
-        })}
-
-        {items.length === 0 && (
-          <div className={styles.empty}>
-            <Lock size={24} />
-            <p>No {activeSlot}s yet — visit the shop to find some treasures!</p>
-          </div>
-        )}
-      </section>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
-
-// Inline module styles — keep this file self-contained if the module CSS exists.
-// If you have a separate WardrobePage.module.css, this file just references it above.
