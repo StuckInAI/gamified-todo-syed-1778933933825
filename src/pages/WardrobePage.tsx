@@ -1,13 +1,14 @@
 import { useMemo, useState } from 'react';
-import { Shirt, Check } from 'lucide-react';
+import { Sparkles, Check } from 'lucide-react';
 import clsx from 'clsx';
-import CharacterStage from '@/components/character/CharacterStage';
 import { useGame } from '@/hooks/useGame';
 import { SHOP_ITEMS } from '@/lib/shop';
-import type { ShopSlot, ShopItem } from '@/types';
-import styles from '@/components/shop/ShopItemCard.module.css';
+import Character from '@/components/character/Character';
+import type { ShopItem } from '@/types';
 
-const SLOTS: { id: ShopSlot; label: string; emoji: string }[] = [
+type Slot = ShopItem['slot'];
+
+const SLOTS: { id: Slot; label: string; emoji: string }[] = [
   { id: 'hat', label: 'Hats', emoji: '🎩' },
   { id: 'outfit', label: 'Outfits', emoji: '👕' },
   { id: 'accessory', label: 'Accessories', emoji: '🎀' },
@@ -15,135 +16,168 @@ const SLOTS: { id: ShopSlot; label: string; emoji: string }[] = [
 ];
 
 export default function WardrobePage() {
-  const { character, equipItem } = useGame();
-  const [activeSlot, setActiveSlot] = useState<ShopSlot>('hat');
+  const { character, equipItem, unequipSlot } = useGame();
+  const [activeSlot, setActiveSlot] = useState<Slot>('hat');
 
-  const ownedItems = useMemo<ShopItem[]>(
-    () => SHOP_ITEMS.filter((i) => character.ownedItems.includes(i.id) && i.slot === activeSlot),
-    [character.ownedItems, activeSlot],
+  const owned = useMemo(
+    () => SHOP_ITEMS.filter((i) => character.ownedItemIds.includes(i.id) && i.slot === activeSlot),
+    [character.ownedItemIds, activeSlot],
   );
 
-  const handleToggle = (item: ShopItem) => {
-    const isEquipped = character.equipped[item.slot] === item.id;
-    if (isEquipped) {
-      equipItem(null);
-    } else {
-      equipItem(item.id);
-    }
-  };
+  const equippedId = character.equipped[activeSlot];
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--sp-5)' }}>
-      <CharacterStage />
+      <header style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: 'var(--ink)' }}>
+          <Sparkles size={20} style={{ verticalAlign: -3, marginRight: 6 }} />
+          Wardrobe
+        </h1>
+        <p style={{ color: 'var(--ink-soft)', fontStyle: 'italic', fontSize: 14 }}>
+          Dress up your little sprout however feels cozy today 💗
+        </p>
+      </header>
+
+      <div
+        style={{
+          background: 'var(--bg-card)',
+          borderRadius: 'var(--r-lg)',
+          padding: 'var(--sp-5)',
+          boxShadow: 'var(--shadow-sm)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 'var(--sp-3)',
+        }}
+      >
+        <Character equipped={character.equipped} size="lg" mood="cheer" />
+        <span style={{ fontWeight: 700, color: 'var(--ink)' }}>{character.name}</span>
+      </div>
 
       <div
         style={{
           display: 'flex',
           gap: 8,
-          flexWrap: 'wrap',
-          justifyContent: 'center',
+          overflowX: 'auto',
+          paddingBottom: 4,
         }}
       >
         {SLOTS.map((s) => (
           <button
             key={s.id}
             onClick={() => setActiveSlot(s.id)}
+            className={clsx()}
             style={{
               padding: '8px 16px',
               borderRadius: 'var(--r-pill)',
+              background: activeSlot === s.id ? 'var(--peach)' : 'var(--bg-soft)',
+              color: 'var(--ink)',
               fontWeight: 700,
               fontSize: 13,
-              background:
-                activeSlot === s.id
-                  ? 'linear-gradient(135deg, var(--peach) 0%, var(--rose) 100%)'
-                  : 'var(--bg-soft)',
-              color: activeSlot === s.id ? 'var(--ink)' : 'var(--ink-soft)',
+              whiteSpace: 'nowrap',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
               boxShadow: activeSlot === s.id ? 'var(--shadow-sm)' : 'none',
-              transition: 'all 0.15s ease',
             }}
           >
-            <span style={{ marginRight: 6 }}>{s.emoji}</span>
-            {s.label}
+            <span>{s.emoji}</span>
+            <span>{s.label}</span>
           </button>
         ))}
       </div>
 
-      {ownedItems.length === 0 ? (
+      {owned.length === 0 ? (
         <div
           style={{
-            textAlign: 'center',
-            padding: 'var(--sp-6)',
             background: 'var(--bg-card)',
             borderRadius: 'var(--r-lg)',
-            boxShadow: 'var(--shadow-sm)',
+            padding: 'var(--sp-6)',
+            textAlign: 'center',
             color: 'var(--ink-soft)',
+            fontStyle: 'italic',
           }}
         >
-          <Shirt size={32} style={{ opacity: 0.4, marginBottom: 8 }} />
-          <p style={{ fontWeight: 700, color: 'var(--ink)', marginBottom: 4 }}>
-            Nothing here yet
-          </p>
-          <p style={{ fontSize: 13, fontStyle: 'italic' }}>
-            Visit the shop to find treasures for this slot 💗
-          </p>
+          No items in this slot yet — visit the shop to find something darling! 🛍️
         </div>
       ) : (
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
             gap: 'var(--sp-3)',
           }}
         >
-          {ownedItems.map((item) => {
-            const isEquipped = character.equipped[item.slot] === item.id;
+          {equippedId && (
+            <button
+              onClick={() => unequipSlot(activeSlot)}
+              style={{
+                padding: 'var(--sp-3)',
+                background: 'var(--bg-soft)',
+                border: '2px dashed var(--ink-mute)',
+                borderRadius: 'var(--r-md)',
+                color: 'var(--ink-soft)',
+                fontWeight: 700,
+                fontSize: 13,
+                minHeight: 120,
+              }}
+            >
+              ✖ Unequip
+            </button>
+          )}
+          {owned.map((item) => {
+            const isEquipped = equippedId === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => handleToggle(item)}
-                className={clsx(styles.card)}
+                onClick={() => equipItem(item.id)}
                 style={{
-                  border: isEquipped
-                    ? '2px solid var(--mint-deep)'
-                    : '2px solid transparent',
-                  cursor: 'pointer',
-                  textAlign: 'left',
+                  padding: 'var(--sp-3)',
+                  background: isEquipped ? 'white' : 'var(--bg-cream)',
+                  border: `2px solid ${isEquipped ? 'var(--mint-deep)' : 'transparent'}`,
+                  borderRadius: 'var(--r-md)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 6,
+                  boxShadow: isEquipped ? 'var(--shadow-sm)' : 'none',
+                  position: 'relative',
                 }}
               >
                 <div
-                  className={styles.preview}
-                  style={{ background: item.color }}
-                >
-                  <span className={styles.previewEmoji}>{item.emoji}</span>
-                </div>
-                <div className={styles.info}>
-                  <span className={styles.name}>{item.name}</span>
-                  <span className={styles.blurb}>{item.blurb}</span>
-                </div>
-                <div
                   style={{
+                    width: 56,
+                    height: 56,
+                    borderRadius: 'var(--r-md)',
+                    background: item.color,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    gap: 6,
-                    padding: '6px 12px',
-                    borderRadius: 'var(--r-pill)',
-                    fontSize: 12,
-                    fontWeight: 800,
-                    background: isEquipped
-                      ? 'var(--mint)'
-                      : 'var(--bg-soft)',
-                    color: isEquipped ? '#2f6a44' : 'var(--ink-soft)',
+                    fontSize: 28,
                   }}
                 >
-                  {isEquipped ? (
-                    <>
-                      <Check size={14} /> Equipped
-                    </>
-                  ) : (
-                    'Wear it'
-                  )}
+                  {item.emoji}
                 </div>
+                <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--ink)' }}>{item.name}</span>
+                {isEquipped && (
+                  <span
+                    style={{
+                      position: 'absolute',
+                      top: 6,
+                      right: 6,
+                      background: 'var(--mint-deep)',
+                      color: 'white',
+                      borderRadius: '50%',
+                      width: 20,
+                      height: 20,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Check size={12} />
+                  </span>
+                )}
               </button>
             );
           })}
