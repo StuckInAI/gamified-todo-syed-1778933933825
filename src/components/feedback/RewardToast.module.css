@@ -1,0 +1,105 @@
+.wrap {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--sp-3);
+  background: white;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  min-width: 280px;
+  max-width: 360px;
+  animation: dropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid var(--mint);
+}
+
+@keyframes dropIn {
+  0% { transform: translateY(-30px) scale(0.9); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--butter), var(--peach));
+  color: #7a5a1f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: sparkle 1s ease-in-out infinite;
+}
+
+@keyframes sparkle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1) rotate(10deg); }
+}
+
+.body { flex: 1; min-width: 0; }
+
+.title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rewards { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.chipXp, .chipCoin {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.chipXp { background: var(--mint); color: #2f6a44; }
+.chipCoin { background: var(--butter); color: #7a5a1f; }
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.confetti span {
+  position: absolute;
+  top: 0;
+  font-size: 18px;
+  animation: fall 1.6s ease-out forwards;
+  opacity: 0;
+}
+
+.confetti span:nth-child(1) { left: 10%; animation-delay: 0s; }
+.confetti span:nth-child(2) { left: 30%; animation-delay: 0.15s; }
+.confetti span:nth-child(3) { left: 50%; animation-delay: 0.05s; }
+.confetti span:nth-child(4) { left: 70%; animation-delay: 0.2s; }
+.confetti span:nth-child(5) { left: 90%; animation-delay: 0.1s; }
+
+@keyframes fall {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateY(80px) rotate(180deg); opacity: 0; }
+}

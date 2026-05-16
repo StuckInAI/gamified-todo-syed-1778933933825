@@ -1,0 +1,124 @@
+.stage {
+  position: relative;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  background: linear-gradient(180deg, #ffe7d4 0%, #ffd1b3 100%);
+  box-shadow: var(--shadow-md);
+  padding: var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.sun {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  font-size: 32px;
+  animation: float 5s ease-in-out infinite;
+}
+
+.decor {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  font-size: 36px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.sparkle1, .sparkle2 {
+  position: absolute;
+  font-size: 14px;
+  animation: sparkle 2.5s ease-in-out infinite;
+}
+.sparkle1 { top: 50px; left: 40%; }
+.sparkle2 { top: 80px; right: 30%; animation-delay: 1s; }
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.ground {
+  position: relative;
+  margin-top: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.charWrap {
+  position: relative;
+  z-index: 2;
+}
+
+.grass {
+  width: 280px;
+  height: 20px;
+  background: radial-gradient(ellipse, var(--mint) 0%, transparent 70%);
+  margin-top: -10px;
+}
+
+.nameplate {
+  position: relative;
+  z-index: 1;
+  margin-top: var(--sp-4);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--r-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 220px;
+  box-shadow: var(--shadow-sm);
+}
+
+.name {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+}
+
+.level {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.xpBar {
+  width: 100%;
+  height: 8px;
+  background: var(--bg-soft);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  box-shadow: var(--shadow-inset);
+  margin-top: 4px;
+}
+
+.xpFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mint-deep), var(--mint));
+  border-radius: var(--r-pill);
+  transition: width 0.6s ease;
+}
+
+.xpText {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}

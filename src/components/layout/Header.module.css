@@ -1,0 +1,109 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  background: rgba(255, 246, 236, 0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(74, 58, 47, 0.06);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.logo {
+  font-size: 28px;
+  animation: wiggle 4s ease-in-out infinite;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(8deg); }
+}
+
+.brandText {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.brandTitle {
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.brandSub {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.levelChip {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #d6ccf0 0%, #bfd9f2 100%);
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--ink);
+  box-shadow: var(--shadow-sm);
+}
+
+.xpTrack {
+  width: 70px;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  box-shadow: var(--shadow-inset);
+}
+
+.xpFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--mint-deep), var(--mint));
+  border-radius: var(--r-pill);
+  transition: width 0.5s ease;
+}
+
+.xpText {
+  font-size: 11px;
+  color: var(--ink-soft);
+  font-weight: 600;
+  min-width: 36px;
+}
+
+.coinChip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, var(--butter) 0%, var(--gold-soft) 100%);
+  border-radius: var(--r-pill);
+  font-weight: 800;
+  font-size: 14px;
+  color: #7a5a1f;
+  box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 540px) {
+  .brandSub { display: none; }
+  .xpText { display: none; }
+  .xpTrack { width: 50px; }
+}

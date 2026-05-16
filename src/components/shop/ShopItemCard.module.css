@@ -1,0 +1,119 @@
+.card {
+  background: var(--bg-card);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  border: 2px solid transparent;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.owned {
+  border-color: var(--mint-deep);
+}
+
+.preview {
+  position: relative;
+  aspect-ratio: 1.4 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emoji {
+  font-size: 56px;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  animation: bob 3s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.equippedBadge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: var(--mint-deep);
+  color: white;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 11px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.body {
+  padding: var(--sp-3) var(--sp-4) var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slot {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-mute);
+}
+
+.name {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.blurb {
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-bottom: var(--sp-2);
+  flex: 1;
+}
+
+.btn {
+  padding: 8px 12px;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.btnBuy {
+  background: linear-gradient(135deg, var(--butter) 0%, var(--gold-soft) 100%);
+  color: #7a5a1f;
+}
+
+.btnBuy:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btnBuy:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btnOwn {
+  background: var(--bg-soft);
+  color: var(--ink-soft);
+}
+
+.btnOwn:hover {
+  background: var(--mint);
+  color: var(--ink);
+}

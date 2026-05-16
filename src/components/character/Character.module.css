@@ -1,0 +1,183 @@
+.stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.sm { width: 80px; height: 100px; }
+.md { width: 140px; height: 180px; }
+.lg { width: 200px; height: 240px; }
+
+.shadow {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 10px;
+  background: radial-gradient(ellipse, rgba(74,58,47,0.18), transparent 70%);
+  border-radius: 50%;
+}
+
+.character {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  animation: bob 3s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Head */
+.head {
+  position: relative;
+  width: 70%;
+  aspect-ratio: 1 / 0.92;
+  background: linear-gradient(180deg, #ffd9c2 0%, #ffc8ad 100%);
+  border-radius: 50% 50% 48% 48% / 55% 55% 45% 45%;
+  box-shadow: var(--shadow-sm), inset 0 -6px 0 rgba(74,58,47,0.04);
+  z-index: 2;
+}
+
+.sm .head { width: 60px; height: 56px; }
+.md .head { width: 100px; height: 92px; }
+.lg .head { width: 140px; height: 130px; }
+
+.eye {
+  position: absolute;
+  top: 42%;
+  width: 10%;
+  aspect-ratio: 1;
+  background: #3b2a2a;
+  border-radius: 50%;
+  animation: blink 4s infinite;
+}
+.sm .eye { width: 7px; height: 7px; }
+.md .eye { width: 11px; height: 11px; }
+.lg .eye { width: 15px; height: 15px; }
+
+.eyeL { left: 28%; }
+.eyeR { right: 28%; }
+
+.sleepy { transform: scaleY(0.2); }
+
+@keyframes blink {
+  0%, 92%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
+}
+
+.cheekL, .cheekR {
+  position: absolute;
+  top: 58%;
+  width: 14%;
+  aspect-ratio: 1;
+  background: rgba(245, 158, 164, 0.55);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+.cheekL { left: 14%; }
+.cheekR { right: 14%; }
+
+.mouth {
+  position: absolute;
+  bottom: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18%;
+  height: 7%;
+  border-bottom: 2px solid #3b2a2a;
+  border-radius: 0 0 100% 100%;
+}
+
+.mouthBig {
+  height: 12%;
+  width: 24%;
+  border-bottom-width: 2.5px;
+}
+
+/* Torso */
+.torso {
+  position: relative;
+  width: 80%;
+  aspect-ratio: 1 / 0.85;
+  background: linear-gradient(180deg, #ffe0cc 0%, #ffd0b8 100%);
+  border-radius: 40% 40% 30% 30% / 35% 35% 25% 25%;
+  margin-top: -10%;
+  box-shadow: var(--shadow-sm);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sm .torso { width: 70px; height: 60px; margin-top: -8px; }
+.md .torso { width: 116px; height: 100px; margin-top: -10px; }
+.lg .torso { width: 160px; height: 140px; margin-top: -14px; }
+
+.outfitEmoji {
+  font-size: 28px;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.05));
+}
+.sm .outfitEmoji { font-size: 18px; }
+.lg .outfitEmoji { font-size: 40px; }
+
+/* Hat */
+.hat {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50%;
+  aspect-ratio: 1 / 0.6;
+  border-radius: 50% 50% 30% 30% / 70% 70% 30% 30%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  box-shadow: var(--shadow-sm);
+}
+.hat span { font-size: 26px; }
+.sm .hat { width: 36px; height: 22px; top: -2px; }
+.sm .hat span { font-size: 16px; }
+.md .hat { width: 64px; height: 38px; top: -4px; }
+.md .hat span { font-size: 24px; }
+.lg .hat { width: 92px; height: 54px; top: -6px; }
+.lg .hat span { font-size: 36px; }
+
+/* Accessory (e.g. scarf, bowtie) */
+.accessory {
+  position: absolute;
+  bottom: 38%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36%;
+  aspect-ratio: 2 / 1;
+  border-radius: var(--r-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-shadow: var(--shadow-sm);
+}
+.accessory span { font-size: 18px; }
+.sm .accessory { width: 26px; height: 12px; }
+.sm .accessory span { font-size: 12px; }
+.md .accessory { width: 44px; height: 22px; }
+.lg .accessory { width: 64px; height: 32px; }
+.lg .accessory span { font-size: 26px; }
